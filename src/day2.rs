@@ -10,10 +10,11 @@ fn read_lines(filename: &str) -> Vec<String> {
 }
 
 fn parse_color(color: &str, handful: &str) -> i32 {
-    let captures = Regex::new(format!(r"(\d) {}", color).as_str())
+    let captures = Regex::new(format!(r"(\d+) {}", color).as_str())
     .unwrap()
     .captures(handful);
 
+    // println!("{:?}", captures);
     match captures {
         Some(capture) => capture[1].parse::<i32>().unwrap(),
         None => 0,
@@ -25,37 +26,50 @@ fn parse_handful(handful: &str) -> (i32, i32, i32) {
     let red: i32 = parse_color("red", handful);
     let green: i32 = parse_color("green", handful);
     let blue: i32 = parse_color("blue", handful);
-    println!("{}", red);
-    // 3 blue, 4 red
-    // {"blue": 3,
-    // "red": 4,
-    // "green": 0}
-    (0, 0, 0)
-
+    (red, green, blue)
 }
 
 // 12 red cubes, 13 green cubes, and 14 blue cubes
 // 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-fn is_game_possible(line: &String) -> bool {
+fn is_game_possible(line: &str) -> bool {
     let red_total: i32 = 12;
     let green_total: i32 = 13;
     let blue_total: i32 = 14;
 
     // at any point are there more reds than red_total?
-    let handfulls: Vec<&str> = line.split(";").collect();
+    let handfuls: Vec<&str> = line.split(";").collect();
+    for handful in handfuls.iter() {
+        let (r, g, b) = parse_handful(handful);
+
+        // println!("{} : {}", handful, b);
+        if r > red_total { return false; }
+        if g > green_total { return false; }
+        if b > blue_total { return false; }
+    }
     true
 }
 
 pub fn solution(filename: &str) -> i32 {
-    // let mut digits = Vec::new();
     let lines = read_lines(filename);
-    // compute the max
-    // for line in &lines {
-        // digits.push(find_digits_in_line(line));
-    // }
+
+    let mut possible_games: Vec<i32> = Vec::new();
+
+    for line in &lines {
+        let game_handfuls: Vec<&str> = line.split(":").collect();
+        let game = Regex::new(r"(\d+)")
+            .unwrap()
+            .find(game_handfuls[0])
+            .unwrap()
+            .as_str()
+            .parse::<i32>()
+            .unwrap();
+
+        if is_game_possible(game_handfuls[1]) {
+            possible_games.push(game);
+        }
+    }
     // sum them all together
-    // digits.iter().sum()
-    5
+    possible_games.iter().sum()
 }
 
 #[cfg(test)]
@@ -73,6 +87,11 @@ mod tests {
     fn test_is_game_possible() {
         let stt = String::from("3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
         assert_eq!(is_game_possible(&stt), true);
+    }
+    #[test]
+    fn test_is_game_possible2() {
+        let stt = String::from("20 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+        assert_eq!(is_game_possible(&stt), false);
     }
 
     #[test]
