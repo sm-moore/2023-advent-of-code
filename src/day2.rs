@@ -49,6 +49,39 @@ fn is_game_possible(line: &str) -> bool {
     true
 }
 
+fn max_rgb(line: &str) -> (i32, i32, i32) {
+    let mut red_msf: i32 = 0;
+    let mut green_msf: i32 = 0;
+    let mut blue_msf: i32 = 0;
+
+    // at any point are there more reds than red_total?
+    let handfuls: Vec<&str> = line.split(";").collect();
+    for handful in handfuls.iter() {
+        let (r, g, b) = parse_handful(handful);
+
+        // println!("{} : {}", handful, b);
+        if r > red_msf { red_msf = r; }
+        if g > green_msf { green_msf = g; }
+        if b > blue_msf { blue_msf = b; }
+    }
+
+    (red_msf, green_msf, blue_msf)
+}
+
+pub fn solution2(filename: &str) -> i32 {
+    let lines = read_lines(filename);
+
+    let mut powers: Vec<i32> = Vec::new();
+
+    for line in &lines {
+        let game_handfuls: Vec<&str> = line.split(":").collect();
+        let (r, g, b) = max_rgb(game_handfuls[1]);
+        powers.push(r*g*b);
+    }
+
+    powers.iter().sum()
+}
+
 pub fn solution(filename: &str) -> i32 {
     let lines = read_lines(filename);
 
@@ -98,4 +131,21 @@ mod tests {
     fn test_parse_handful(){
         assert_eq!(parse_handful("3 blue, 4 red"), (4, 0, 3))
     }
+
+    // part2
+    #[test]
+    fn test_solution2() {
+        assert_eq!(solution2("inputs/day2/test1.txt"), 2286);
+    }
+
+    #[test]
+    fn test_max_rgb() {
+        let stt = String::from("3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+        assert_eq!(max_rgb(&stt), (4, 2, 6));
+    }
+    // #[test]
+    // fn test_is_game_possible2() {
+    //     let stt = String::from("20 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+    //     assert_eq!(is_game_possible(&stt), false);
+    // }
 }
