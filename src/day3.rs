@@ -1,4 +1,5 @@
 use std::fs::read_to_string;
+use std::collections::HashMap;
 
 fn read_lines(filename: &str) -> Vec<String> {
     read_to_string(filename) 
@@ -89,41 +90,79 @@ pub fn solution(filename: &str) -> i32 {
 
     part_number_sum
 }
-    // 0  1  2
-// [., ., .]0
-// [., X, .]1
-// [., ., .]2
+
 // returns the index of any adjacent starts
 fn near_star_idx(col: usize, row: usize, matrix: &Vec<Vec<char>>) -> Vec<(usize,usize)> {
-    let mut adjacent_starts: Vec<usize = Vec::new();
+    let mut adjacent_stars: Vec<(usize,usize)> = Vec::new();
     if matrix[row-1][col-1] == '*' {
-        adjacent_starts.push((row-1, col-1));
+        adjacent_stars.push((row-1, col-1));
     }
     if matrix[row-1][col] == '*' {
-        adjacent_starts.push((row-1, col));
+        adjacent_stars.push((row-1, col));
     }
     if matrix[row-1][col+1] == '*' {
-        adjacent_starts.push((row-1, col+1));
+        adjacent_stars.push((row-1, col+1));
     }
     if matrix[row][col-1] == '*' {
-        adjacent_starts.push((row, col-1));
+        adjacent_stars.push((row, col-1));
     }
     if matrix[row][col+1] == '*' {
-        adjacent_starts.push((row, col+1));
+        adjacent_stars.push((row, col+1));
     }
     if matrix[row+1][col-1] == '*' {
-        adjacent_starts.push((row+1, col-1));
+        adjacent_stars.push((row+1, col-1));
     }
     if matrix[row+1][col] == '*' {
-        adjacent_starts.push((row+1, col));
+        adjacent_stars.push((row+1, col));
     }
     if matrix[row+1][col+1] == '*' {
-        adjacent_starts.push((row+1, col+1));
+        adjacent_stars.push((row+1, col+1));
     }
 
-    adjacent_starts
+    adjacent_stars
 }
 
+fn parse_row2(matrix: &Vec<Vec<char>>, row_index: usize) -> HashMap<i32, Vec<(usize,usize)>> {
+    let mut part_number_so_far: String = String::from("");
+    let mut current_part_near_symbol = false;
+    let mut current_star_idxs: Vec<(usize,usize)> = Vec::new();
+
+    let mut part_numbers_to_stars: HashMap<i32, Vec<(usize,usize)>> = HashMap::new();
+    
+    // I modified my input to surround it with plain dots AND added an extra dot at the end of each line (so 2 dots extra at the end.)
+    for i in 1..matrix[row_index].len()-1 {
+        let cchar = matrix[row_index][i];
+    
+        // Process digits
+        if cchar.is_numeric() {
+            // store in part_number_so_far
+            part_number_so_far = format!("{}{}", part_number_so_far, cchar);
+        
+            // Part isn't currently near a symbol but this new position is, update that.
+            if !current_part_near_symbol && near_star_idx(i, row_index, matrix).len() > 0 {
+                current_part_near_symbol = true;
+                current_star_idxs.extend(near_star_idx(i, row_index, matrix));
+            }
+        }
+        // Process non digits
+        // if cchar is not a digit and part_number_so_far is not an empty string
+        if !cchar.is_numeric(){
+
+            // If we have a part near a symbol
+            if part_number_so_far.len() > 0  && current_part_near_symbol {
+                // add part_number_so_far to part_numbers
+                let part_num: i32 = part_number_so_far.parse().unwrap();
+                part_numbers_to_stars.insert(part_num, current_star_idxs);
+            }
+
+            // Make sure things are cleared out for next part.
+            part_number_so_far = String::from("");
+            current_part_near_symbol = false;
+            current_star_idxs = Vec::new();
+        }
+    }
+    part_numbers_to_stars
+}
 // A gear is any * symbol that is adjacent to exactly two part numbers.
 // Its gear ratio is the result of multiplying those two numbers together.
 pub fn solution2(filename: &str) -> i32 {
@@ -196,5 +235,39 @@ mod tests {
     // fn test_solution2() {
     //     assert_eq!(solution2("inputs/day3/test1.txt"), 2286);
     // }
+
+    #[test]
+    fn test_near_star_idx() {
+        let input = vec![
+            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+            vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+            vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+            vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+        ];
+        assert_eq!(near_star_idx(1, 1, &input), vec![]);
+        assert_eq!(near_star_idx(3, 1, &input), vec![(2, 4)]);
+    }
+
+    #[test]
+    fn test_parse_row2() {
+        let input = vec![
+            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+            vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+            vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+            vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+        ];
+        let mut expected1 = HashMap::new();
+        expected1.insert(467, vec![(2,4)]);
+
+        assert_eq!(parse_row2(&input, 1), expected1);
+
+        assert_eq!(parse_row2(&input, 2), HashMap::new());
+
+        let mut expected3 = HashMap::new();
+        expected3.insert(35, vec![(2,4)]);
+        assert_eq!(parse_row2(&input, 3), expected3);
+    }
 
 }
