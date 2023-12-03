@@ -152,7 +152,12 @@ fn parse_row2(matrix: &Vec<Vec<char>>, row_index: usize) -> HashMap<i32, Vec<(us
             if part_number_so_far.len() > 0  && current_part_near_symbol {
                 // add part_number_so_far to part_numbers
                 let part_num: i32 = part_number_so_far.parse().unwrap();
-                part_numbers_to_stars.insert(part_num, current_star_idxs);
+                if part_numbers_to_stars.contains_key(&part_num) {
+                    part_numbers_to_stars.get_mut(&part_num).unwrap().extend(current_star_idxs);
+                }
+                else {
+                    part_numbers_to_stars.insert(part_num, current_star_idxs);
+                }
             }
 
             // Make sure things are cleared out for next part.
@@ -268,6 +273,19 @@ mod tests {
         let mut expected3 = HashMap::new();
         expected3.insert(35, vec![(2,4)]);
         assert_eq!(parse_row2(&input, 3), expected3);
+    }
+
+    #[test]
+    fn test_parse_row2_b() {
+        let input = vec![
+            vec!['.','.', '.', '.', '.', '.'],
+            vec!['.','4', '.', '4', '.', '.'],
+            vec!['.','.', '*', '.', '.', '.'],
+            vec!['.','.', '.', '.', '.', '.'],
+        ];
+        let mut expected1 = HashMap::new();
+        expected1.insert(4, vec![(2,2), (2,2)]);
+        assert_eq!(parse_row2(&input, 1), expected1);
     }
 
 }
