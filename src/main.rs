@@ -1,7 +1,7 @@
 
-mod day2;
+mod day3;
 
 fn main() {
-    println!("{:?}", day2::solution("inputs/day2/input.txt"));
-    println!("{:?}", day2::solution2("inputs/day2/input.txt"));
+    println!("{:?}", day3::solution("inputs/day3/input.txt"));
+    println!("{:?}", day3::solution2("inputs/day3/input.txt"));
 }

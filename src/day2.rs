@@ -105,47 +105,47 @@ pub fn solution(filename: &str) -> i32 {
     possible_games.iter().sum()
 }
 
-#[cfg(test)]
-mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     // Note this useful idiom: importing names from outer (for mod tests) scope.
+//     use super::*;
     
-    // part1
-    #[test]
-    fn test_solution() {
-        assert_eq!(solution("inputs/day2/test1.txt"), 8);
-    }
+//     // part1
+//     #[test]
+//     fn test_solution() {
+//         assert_eq!(solution("inputs/day2/test1.txt"), 8);
+//     }
 
-    #[test]
-    fn test_is_game_possible() {
-        let stt = String::from("3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
-        assert_eq!(is_game_possible(&stt), true);
-    }
-    #[test]
-    fn test_is_game_possible2() {
-        let stt = String::from("20 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
-        assert_eq!(is_game_possible(&stt), false);
-    }
+//     #[test]
+//     fn test_is_game_possible() {
+//         let stt = String::from("3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+//         assert_eq!(is_game_possible(&stt), true);
+//     }
+//     #[test]
+//     fn test_is_game_possible2() {
+//         let stt = String::from("20 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+//         assert_eq!(is_game_possible(&stt), false);
+//     }
 
-    #[test]
-    fn test_parse_handful(){
-        assert_eq!(parse_handful("3 blue, 4 red"), (4, 0, 3))
-    }
+//     #[test]
+//     fn test_parse_handful(){
+//         assert_eq!(parse_handful("3 blue, 4 red"), (4, 0, 3))
+//     }
 
-    // part2
-    #[test]
-    fn test_solution2() {
-        assert_eq!(solution2("inputs/day2/test1.txt"), 2286);
-    }
+//     // part2
+//     #[test]
+//     fn test_solution2() {
+//         assert_eq!(solution2("inputs/day2/test1.txt"), 2286);
+//     }
 
-    #[test]
-    fn test_max_rgb() {
-        let stt = String::from("3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
-        assert_eq!(max_rgb(&stt), (4, 2, 6));
-    }
-    // #[test]
-    // fn test_is_game_possible2() {
-    //     let stt = String::from("20 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
-    //     assert_eq!(is_game_possible(&stt), false);
-    // }
-}
+//     #[test]
+//     fn test_max_rgb() {
+//         let stt = String::from("3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+//         assert_eq!(max_rgb(&stt), (4, 2, 6));
+//     }
+//     // #[test]
+//     // fn test_is_game_possible2() {
+//     //     let stt = String::from("20 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
+//     //     assert_eq!(is_game_possible(&stt), false);
+//     // }
+// }
