@@ -36,16 +36,14 @@ pub fn solution(filename: &str) -> i32 {
         let (win, has) = card;
         let diff: HashSet<_> = (*has).difference(win).collect::<HashSet<_>>();
         let matching = has.len() - diff.len();
+        
+        // For every matching card, you get 1 point for first one, and then after that it doubles. 
         for _i in 0..matching {
-            if card_total == 0 {
-                card_total = 1;
-            }
-            else {
-                card_total = card_total * 2;
-            }
+            if card_total == 0 { card_total = 1; }
+            else { card_total = card_total * 2; }
         }
 
-        total_so_far = total_so_far + card_total;
+        total_so_far += card_total;
     }
 
     total_so_far
@@ -71,15 +69,16 @@ pub fn solution2(filename: &str) -> i32 {
     for i in 0..max_card {
         let card_num = i + 1;
 
-        // Process each card n times.
         let (win, has) = &parsed[i];
-
+        
         let diff: HashSet<_> = has.difference(&win).collect::<HashSet<_>>();
         let matching = has.len() - diff.len();
-
+        
+        // Process each card n times.
         for repeats in 0..num_of_each_card[card_num] {
 
-            // card_num has matching so you win one copy each of the next matching cards
+            // Winning cards are (current_card+1 - current_card+num_matching)
+            // So of card 1 has 4 matching you get 2, 3, 4, 5.
             for win_more_of in card_num+1..card_num+matching+1 {
                 if win_more_of <= max_card {
                     num_of_each_card[win_more_of] += 1;
