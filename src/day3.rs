@@ -218,137 +218,137 @@ pub fn solution2(filename: &str) -> i32 {
     ratio
 }
 
-#[cfg(test)]
-mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     // Note this useful idiom: importing names from outer (for mod tests) scope.
+//     use super::*;
     
-    // part1
-    #[test]
-    fn test_solution() {
-        assert_eq!(solution("inputs/day3/test1.txt"), 4361);
-    }
+//     // part1
+//     #[test]
+//     fn test_solution() {
+//         assert_eq!(solution("inputs/day3/test1.txt"), 4361);
+//     }
 
-    // 467..114.. [4, 6, 7, ., ., 1, 1, 4, ., .]
-    // ...*...... [., ., ., *, ., ., ., ., ., .]
-    // ..35..633. [., ., 3, 5, ., ., 6, 3, 3, .]
-    #[test]
-    fn test_build_matrix() {
-        let expected = vec![
-            vec!['4', '6', '7', '.', '.', '1', '1', '4', '.', '.'],
-            vec!['.', '.', '.', '*', '.', '.', '.', '.', '.', '.'],
-            vec!['.', '.', '3', '5', '.', '.', '6', '3', '3', '.'],
-        ];
-        assert_eq!(build_matrix(read_lines("inputs/day3/test1small.txt")), expected);
-    }
+//     // 467..114.. [4, 6, 7, ., ., 1, 1, 4, ., .]
+//     // ...*...... [., ., ., *, ., ., ., ., ., .]
+//     // ..35..633. [., ., 3, 5, ., ., 6, 3, 3, .]
+//     #[test]
+//     fn test_build_matrix() {
+//         let expected = vec![
+//             vec!['4', '6', '7', '.', '.', '1', '1', '4', '.', '.'],
+//             vec!['.', '.', '.', '*', '.', '.', '.', '.', '.', '.'],
+//             vec!['.', '.', '3', '5', '.', '.', '6', '3', '3', '.'],
+//         ];
+//         assert_eq!(build_matrix(read_lines("inputs/day3/test1small.txt")), expected);
+//     }
 
-    #[test]
-    fn test_parse_row() {
-        let input = vec![
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
-            vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-        ];
-        assert_eq!(parse_row(&input, 1), vec![467]);
-        assert_eq!(parse_row(&input, 2), vec![]);
-        assert_eq!(parse_row(&input, 3), vec![35]);
-        assert_eq!(parse_row(&input, 4), vec![]);
-    }
+//     #[test]
+//     fn test_parse_row() {
+//         let input = vec![
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+//             vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//         ];
+//         assert_eq!(parse_row(&input, 1), vec![467]);
+//         assert_eq!(parse_row(&input, 2), vec![]);
+//         assert_eq!(parse_row(&input, 3), vec![35]);
+//         assert_eq!(parse_row(&input, 4), vec![]);
+//     }
 
-    #[test]
-    fn test_near_symbol() {
-        let input = vec![
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
-            vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-        ];
-        assert_eq!(near_symbol(1, 1, &input), false);
-        assert_eq!(near_symbol(3, 1, &input), true);
-    }
+//     #[test]
+//     fn test_near_symbol() {
+//         let input = vec![
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+//             vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//         ];
+//         assert_eq!(near_symbol(1, 1, &input), false);
+//         assert_eq!(near_symbol(3, 1, &input), true);
+//     }
 
-    // part2
-    #[test]
-    fn test_solution2() {
-        assert_eq!(solution2("inputs/day3/test1.txt"), 467835);
-    }
+//     // part2
+//     #[test]
+//     fn test_solution2() {
+//         assert_eq!(solution2("inputs/day3/test1.txt"), 467835);
+//     }
 
-    #[test]
-    fn test_near_star_idx() {
-        let input = vec![
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
-            vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-        ];
-        assert_eq!(near_star_idx(1, 1, &input), vec![]);
-        assert_eq!(near_star_idx(3, 1, &input), vec![(2, 4)]);
-    }
+//     #[test]
+//     fn test_near_star_idx() {
+//         let input = vec![
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+//             vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//         ];
+//         assert_eq!(near_star_idx(1, 1, &input), vec![]);
+//         assert_eq!(near_star_idx(3, 1, &input), vec![(2, 4)]);
+//     }
 
-    // #[test]
-    // fn test_parse_row2() {
-    //     let input = vec![
-    //         vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-    //         vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
-    //         vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
-    //         vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
-    //         vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-    //     ];
-    //     let mut expected1 = HashMap::new();
-    //     expected1.insert(467, vec![(2,4)]);
+//     // #[test]
+//     // fn test_parse_row2() {
+//     //     let input = vec![
+//     //         vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//     //         vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+//     //         vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+//     //         vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+//     //         vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//     //     ];
+//     //     let mut expected1 = HashMap::new();
+//     //     expected1.insert(467, vec![(2,4)]);
 
-    //     assert_eq!(parse_row2(&input, 1), expected1);
+//     //     assert_eq!(parse_row2(&input, 1), expected1);
 
-    //     assert_eq!(parse_row2(&input, 2), HashMap::new());
+//     //     assert_eq!(parse_row2(&input, 2), HashMap::new());
 
-    //     let mut expected3 = HashMap::new();
-    //     expected3.insert(35, vec![(2,4)]);
-    //     assert_eq!(parse_row2(&input, 3), expected3);
-    // }
+//     //     let mut expected3 = HashMap::new();
+//     //     expected3.insert(35, vec![(2,4)]);
+//     //     assert_eq!(parse_row2(&input, 3), expected3);
+//     // }
 
-    // #[test]
-    // fn test_parse_row2_b() {
-    //     let input = vec![
-    //         vec!['.','.', '.', '.', '.', '.'],
-    //         vec!['.','4', '.', '4', '.', '.'],
-    //         vec!['.','.', '*', '.', '.', '.'],
-    //         vec!['.','.', '.', '.', '.', '.'],
-    //     ];
-    //     let mut expected1 = HashMap::new();
-    //     expected1.insert(4, vec![(2,2), (2,2)]);
-    //     assert_eq!(parse_row2(&input, 1), expected1);
-    // }
+//     // #[test]
+//     // fn test_parse_row2_b() {
+//     //     let input = vec![
+//     //         vec!['.','.', '.', '.', '.', '.'],
+//     //         vec!['.','4', '.', '4', '.', '.'],
+//     //         vec!['.','.', '*', '.', '.', '.'],
+//     //         vec!['.','.', '.', '.', '.', '.'],
+//     //     ];
+//     //     let mut expected1 = HashMap::new();
+//     //     expected1.insert(4, vec![(2,2), (2,2)]);
+//     //     assert_eq!(parse_row2(&input, 1), expected1);
+//     // }
 
-    #[test]
-    fn test_parse_matrix2() {
-        let input = vec![
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
-            vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
-            vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
-            vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
-        ];
-        let mut expected1 = HashMap::new();
-        expected1.insert(467, vec![(2,4)]);
-        expected1.insert(35, vec![(2,4)]);
-        assert_eq!(parse_matrix2(&input), expected1);
-    }
+//     #[test]
+//     fn test_parse_matrix2() {
+//         let input = vec![
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','4', '6', '7', '.', '.', '1', '1', '4', '.', '.','.','.',],
+//             vec!['.','.', '.', '.', '*', '.', '.', '.', '.', '.', '.','.','.',],
+//             vec!['.','.', '.', '3', '5', '.', '.', '6', '3', '3', '.','.','.',],
+//             vec!['.','.', '.', '.', '.', '.', '.', '.', '.', '.', '.','.','.',],
+//         ];
+//         let mut expected1 = HashMap::new();
+//         expected1.insert(467, vec![(2,4)]);
+//         expected1.insert(35, vec![(2,4)]);
+//         assert_eq!(parse_matrix2(&input), expected1);
+//     }
 
-    #[test]
-    fn test_parse_matrix2_b() {
-        let input = vec![
-            vec!['.','.', '.', '.', '.', '.'],
-            vec!['.','4', '.', '4', '.', '.'],
-            vec!['.','.', '*', '.', '.', '.'],
-            vec!['.','.', '.', '.', '.', '.'],
-        ];
-        let mut expected1 = HashMap::new();
-        expected1.insert(4, vec![(2,2), (2,2)]);
-        assert_eq!(parse_matrix2(&input), expected1);
-    }
+//     #[test]
+//     fn test_parse_matrix2_b() {
+//         let input = vec![
+//             vec!['.','.', '.', '.', '.', '.'],
+//             vec!['.','4', '.', '4', '.', '.'],
+//             vec!['.','.', '*', '.', '.', '.'],
+//             vec!['.','.', '.', '.', '.', '.'],
+//         ];
+//         let mut expected1 = HashMap::new();
+//         expected1.insert(4, vec![(2,2), (2,2)]);
+//         assert_eq!(parse_matrix2(&input), expected1);
+//     }
 
-}
+// }
